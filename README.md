@@ -2,12 +2,12 @@
 
 Este módulo de Odoo ha sido diseñado para gestionar de manera integral una academia de idiomas o centro de estudios, permitiendo el control de cursos, sesiones de clase, profesorado, alumnado y facturación.
 
-## 🚀 Descripción del Proyecto
+## Descripción del Proyecto
 Academia EduOdoo transforma la gestión académica tradicional en una experiencia digital fluida. El sistema permite planificar horarios, controlar el aforo de las aulas, gestionar la disponibilidad de los docentes y realizar el seguimiento del ciclo de vida de las matrículas de los alumnos.
 
 ---
 
-## 📅 Desarrollo del Proyecto por Semanas
+## Desarrollo del Proyecto por Semanas
 
 ### Semana 1: Cimientos y Estructura de Datos (26 - 30 Enero)
 En la primera fase, definimos la arquitectura del sistema y las relaciones entre los modelos fundamentales:
@@ -34,7 +34,7 @@ Llevamos la interfaz al siguiente nivel con visualizaciones avanzadas:
 
 ---
 
-## 🛡️ Restricciones y Reglas de Negocio
+## Restricciones y Reglas de Negocio
 El sistema garantiza la integridad de los datos mediante las siguientes reglas:
 1.  **No se permiten solapamientos**: Un profesor no puede impartir dos clases al mismo tiempo (se valida mediante `fecha_inicio` y `duracion_horas`).
 2.  **Límite de estudiantes**: El número de alumnos en una sesión nunca puede superar el campo `num_asientos`.
@@ -42,7 +42,7 @@ El sistema garantiza la integridad de los datos mediante las siguientes reglas:
 
 ---
 
-## 🛠️ Requisitos e Instalación
+## Requisitos e Instalación
 1.  Odoo 17.0 o superior.
 2.  Dependencias: `base`, `contacts`, `mail`.
 3.  **Instalación**: Copiar la carpeta `proyecto_edu_odoo` al directorio de `addons`, actualizar la lista de aplicaciones e instalar "Academia EduOdoo".
