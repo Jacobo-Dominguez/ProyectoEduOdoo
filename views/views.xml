@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================== -->
+    <!-- CURSO VIEWS -->
+    <!-- ===================================== -->
+    
+    <!-- CURSO: FORM VIEW -->
+    <record id="view_edu_curso_form" model="ir.ui.view">
+        <field name="name">edu.curso.form</field>
+        <field name="model">edu.curso</field>
+        <field name="arch" type="xml">
+            <form string="Curso">
+                <sheet>
+                    <group>
+                        <field name="titulo"/>
+                        <field name="nivel"/>
+                        <field name="precio"/>
+                    </group>
+                    <group>
+                        <field name="descripcion" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Alumnos">
+                            <field name="alumno_ids" widget="many2many_tags"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- CURSO: LIST VIEW -->
+    <record id="view_edu_curso_list" model="ir.ui.view">
+        <field name="name">edu.curso.list</field>
+        <field name="model">edu.curso</field>
+        <field name="arch" type="xml">
+            <list string="Cursos">
+                <field name="titulo"/>
+                <field name="nivel"/>
+                <field name="precio"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- CURSO: ACTION -->
+    <record id="action_edu_curso" model="ir.actions.act_window">
+        <field name="name">Cursos</field>
+        <field name="res_model">edu.curso</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ===================================== -->
+    <!-- SESION VIEWS -->
+    <!-- ===================================== -->
+    
+    <!-- SESION: FORM VIEW -->
+    <record id="view_edu_sesion_form" model="ir.ui.view">
+        <field name="name">edu.sesion.form</field>
+        <field name="model">edu.sesion</field>
+        <field name="arch" type="xml">
+            <form string="Sesión">
+                <sheet>
+                    <group>
+                        <field name="curso_id"/>
+                        <field name="clase_id"/>
+                        <field name="fecha_inicio"/>
+                        <field name="duracion_horas"/>
+                        <field name="num_asientos"/>
+                        <field name="profesor_id"/>
+                        <field name="color" groups="base.group_no_one"/>
+                    </group>
+                    <group>
+                        <field name="asientos_ocupados" readonly="1"/>
+                        <field name="porcentaje_ocupacion" widget="progressbar"/>
+                    </group>
+                    <notebook>
+                        <page string="Alumnos Inscritos">
+                            <field name="alumno_ids" widget="many2many_tags"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- SESION: LIST VIEW -->
+    <record id="view_edu_sesion_list" model="ir.ui.view">
+        <field name="name">edu.sesion.list</field>
+        <field name="model">edu.sesion</field>
+        <field name="arch" type="xml">
+            <list string="Sesiones" decoration-danger="porcentaje_ocupacion == 100" decoration-warning="porcentaje_ocupacion &gt; 80">
+                <field name="fecha_inicio"/>
+                <field name="curso_id"/>
+                <field name="clase_id"/>
+                <field name="duracion_horas"/>
+                <field name="num_asientos"/>
+                <field name="asientos_ocupados"/>
+                <field name="porcentaje_ocupacion" widget="progressbar"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- SESION: CALENDAR VIEW -->
+    <record id="view_edu_sesion_calendar" model="ir.ui.view">
+        <field name="name">edu.sesion.calendar</field>
+        <field name="model">edu.sesion</field>
+        <field name="arch" type="xml">
+            <calendar string="Sesiones" date_start="fecha_inicio" date_delay="duracion_horas" color="profesor_id">
+                <field name="curso_id"/>
+                <field name="profesor_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- SESION: KANBAN VIEW -->
+    <record id="view_edu_sesion_kanban" model="ir.ui.view">
+        <field name="name">edu.sesion.kanban</field>
+        <field name="model">edu.sesion</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="curso_id" class="o_kanban_mobile">
+                <field name="color"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="oe_kanban_color_#{record.color.raw_value} oe_kanban_global_click">
+                            <div class="o_dropdown_kanban dropdown">
+                                <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
+                                    <span class="fa fa-ellipsis-v"/>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <ul class="oe_kanban_colorpicker" data-field="color"/>
+                                </div>
+                            </div>
+                            <div class="oe_kanban_content">
+                                <div><strong><field name="curso_id"/></strong></div>
+                                <div><field name="fecha_inicio"/></div>
+                                <div>Profesor: <field name="profesor_id"/></div>
+                                <div class="mt-2">
+                                    <field name="porcentaje_ocupacion" widget="progressbar"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- SESION: ACTION -->
+    <record id="action_edu_sesion" model="ir.actions.act_window">
+        <field name="name">Sesiones</field>
+        <field name="res_model">edu.sesion</field>
+        <field name="view_mode">kanban,calendar,list,form</field>
+    </record>
+
+    <!-- ===================================== -->
+    <!-- ALUMNO VIEWS -->
+    <!-- ===================================== -->
+    
+    <!-- ALUMNO: FORM VIEW -->
+    <record id="view_edu_alumno_form" model="ir.ui.view">
+        <field name="name">edu.alumno.form</field>
+        <field name="model">edu.alumno</field>
+        <field name="arch" type="xml">
+            <form string="Alumno">
+                <sheet>
+                    <group>
+                        <field name="nombre"/>
+                        <field name="apellidos"/>
+                        <field name="email"/>
+                    </group>
+                    <notebook>
+                        <page string="Cursos">
+                            <field name="curso_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Sesiones">
+                            <field name="sesion_ids" widget="many2many_tags"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ALUMNO: LIST VIEW -->
+    <record id="view_edu_alumno_list" model="ir.ui.view">
+        <field name="name">edu.alumno.list</field>
+        <field name="model">edu.alumno</field>
+        <field name="arch" type="xml">
+            <list string="Alumnos">
+                <field name="nombre"/>
+                <field name="apellidos"/>
+                <field name="email"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ALUMNO: ACTION -->
+    <record id="action_edu_alumno" model="ir.actions.act_window">
+        <field name="name">Alumnos</field>
+        <field name="res_model">edu.alumno</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ===================================== -->
+    <!-- PROFESOR VIEWS -->
+    <!-- ===================================== -->
+    
+    <!-- PROFESOR: FORM VIEW -->
+    <record id="view_edu_profesor_form" model="ir.ui.view">
+        <field name="name">edu.profesor.form</field>
+        <field name="model">edu.profesor</field>
+        <field name="arch" type="xml">
+            <form string="Profesor">
+                <sheet>
+                    <group>
+                        <field name="nombre"/>
+                        <field name="apellidos"/>
+                        <field name="email"/>
+                        <field name="titulacion"/>
+                    </group>
+                    <notebook>
+                        <page string="Cursos que Imparte">
+                            <field name="curso_ids" widget="many2many_tags"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- PROFESOR: LIST VIEW -->
+    <record id="view_edu_profesor_list" model="ir.ui.view">
+        <field name="name">edu.profesor.list</field>
+        <field name="model">edu.profesor</field>
+        <field name="arch" type="xml">
+            <list string="Profesores">
+                <field name="nombre"/>
+                <field name="apellidos"/>
+                <field name="email"/>
+                <field name="titulacion"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PROFESOR: ACTION -->
+    <record id="action_edu_profesor" model="ir.actions.act_window">
+        <field name="name">Profesores</field>
+        <field name="res_model">edu.profesor</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ===================================== -->
+    <!-- CLASE VIEWS -->
+    <!-- ===================================== -->
+    
+    <!-- CLASE: FORM VIEW -->
+    <record id="view_edu_clase_form" model="ir.ui.view">
+        <field name="name">edu.clase.form</field>
+        <field name="model">edu.clase</field>
+        <field name="arch" type="xml">
+            <form string="Clase">
+                <sheet>
+                    <group>
+                        <field name="nombre"/>
+                        <field name="grupo"/>
+                        <field name="horario"/>
+                        <field name="curso_id"/>
+                    </group>
+                    <group>
+                        <field name="descripcion" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Alumnos">
+                            <field name="alumno_ids" widget="many2many_tags"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- CLASE: LIST VIEW -->
+    <record id="view_edu_clase_list" model="ir.ui.view">
+        <field name="name">edu.clase.list</field>
+        <field name="model">edu.clase</field>
+        <field name="arch" type="xml">
+            <list string="Clases">
+                <field name="nombre"/>
+                <field name="grupo"/>
+                <field name="horario"/>
+                <field name="curso_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- CLASE: ACTION -->
+    <record id="action_edu_clase" model="ir.actions.act_window">
+        <field name="name">Clases</field>
+        <field name="res_model">edu.clase</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ===================================== -->
+    <!-- FACTURACION VIEWS -->
+    <!-- ===================================== -->
+    
+    <!-- FACTURACION: FORM VIEW -->
+    <record id="view_edu_facturacion_form" model="ir.ui.view">
+        <field name="name">edu.facturacion.form</field>
+        <field name="model">edu.facturacion</field>
+        <field name="arch" type="xml">
+            <form string="Facturación">
+                <sheet>
+                    <group>
+                        <field name="numero_factura"/>
+                        <field name="alumno_id"/>
+                        <field name="curso_id"/>
+                        <field name="cantidad"/>
+                        <field name="concepto"/>
+                    </group>
+                    <group>
+                        <field name="fecha_pago"/>
+                        <field name="estado_pago"/>
+                        <field name="fecha_creacion"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- FACTURACION: LIST VIEW -->
+    <record id="view_edu_facturacion_list" model="ir.ui.view">
+        <field name="name">edu.facturacion.list</field>
+        <field name="model">edu.facturacion</field>
+        <field name="arch" type="xml">
+            <list string="Facturas">
+                <field name="numero_factura"/>
+                <field name="alumno_id"/>
+                <field name="curso_id"/>
+                <field name="cantidad"/>
+                <field name="estado_pago"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===================================== -->
+    <!-- MATRICULA VIEWS -->
+    <!-- ===================================== -->
+    <record id="view_edu_matricula_form" model="ir.ui.view">
+        <field name="name">edu.matricula.form</field>
+        <field name="model">edu.matricula</field>
+        <field name="arch" type="xml">
+            <form string="Matrícula">
+                <header>
+                    <button name="action_confirmar" string="Confirmar" type="object" class="oe_highlight" invisible="state != 'borrador'"/>
+                    <button name="action_pagar" string="Pagar" type="object" class="oe_highlight" invisible="state != 'confirmada'"/>
+                    <button name="action_borrador" string="Volver a Borrador" type="object" invisible="state == 'borrador'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="borrador,confirmada,pagada"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="alumno_id"/>
+                        <field name="curso_id"/>
+                        <field name="fecha_matricula"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_edu_matricula_list" model="ir.ui.view">
+        <field name="name">edu.matricula.list</field>
+        <field name="model">edu.matricula</field>
+        <field name="arch" type="xml">
+            <list string="Matrículas">
+                <field name="alumno_id"/>
+                <field name="curso_id"/>
+                <field name="fecha_matricula"/>
+                <field name="state" widget="badge" decoration-info="state == 'borrador'" decoration-warning="state == 'confirmada'" decoration-success="state == 'pagada'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_edu_matricula" model="ir.actions.act_window">
+        <field name="name">Matrículas</field>
+        <field name="res_model">edu.matricula</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- FACTURACION: ACTION -->
+    <record id="action_edu_facturacion" model="ir.actions.act_window">
+        <field name="name">Facturas</field>
+        <field name="res_model">edu.facturacion</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ===================================== -->
+    <!-- MENUS -->
+    <!-- ===================================== -->
+    
+    <!-- Root Menu -->
+    <menuitem id="menu_edu_root" name="Academia EduOdoo"/>
+    
+    <!-- 1. Cursos (Base del sistema) -->
+    <menuitem id="menu_edu_cursos" name="Cursos" parent="menu_edu_root" action="action_edu_curso" sequence="1"/>
+    
+    <!-- 2. Clases (Grupos dentro de cursos) -->
+    <menuitem id="menu_edu_clases" name="Clases" parent="menu_edu_root" action="action_edu_clase" sequence="2"/>
+    
+    <!-- 3. Sesiones (Programación de clases) -->
+    <menuitem id="menu_edu_sesiones" name="Sesiones" parent="menu_edu_root" action="action_edu_sesion" sequence="3"/>
+    
+    <!-- 4. Alumnos (Registro de estudiantes) -->
+    <menuitem id="menu_edu_alumnos" name="Alumnos" parent="menu_edu_root" action="action_edu_alumno" sequence="4"/>
+    
+    <!-- 5. Profesores (Docentes) -->
+    <menuitem id="menu_edu_profesores" name="Profesores" parent="menu_edu_root" action="action_edu_profesor" sequence="5"/>
+    
+    <!-- 6. Matrículas (Gestión de inscripciones) -->
+    <menuitem id="menu_edu_matriculas" name="Matrículas" parent="menu_edu_root" action="action_edu_matricula" sequence="6"/>
+    
+    <!-- 7. Facturas (Gestión de pagos) -->
+    <menuitem id="menu_edu_facturacion" name="Facturas" parent="menu_edu_root" action="action_edu_facturacion" sequence="7"/>
+</odoo>
